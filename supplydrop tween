@@ -1,0 +1,68 @@
+local TweenService = game:GetService("TweenService")
+local Workspace = game:GetService("Workspace")
+
+local character = game.Players.LocalPlayer.Character
+
+-- Define the search function
+local function searchForTargetObject()
+    local supplyDrops = Workspace.SupplyDrops:GetChildren()
+
+    -- Check if there are any child objects in the folder
+    if #supplyDrops > 0 then
+        -- Get the first child object
+        local targetObject = supplyDrops[1]
+
+        -- Calculate the desired end position of the tween
+        local endPosition = targetObject.CFrame.p
+
+        -- Create the TweenInfo object
+        local tweenInfo = TweenInfo.new(
+            2,  -- duration
+            Enum.EasingStyle.Quint,  -- easing style
+            Enum.EasingDirection.Out,  -- easing direction
+            0,  -- number of repetitions
+            false,  -- reverses direction
+            0  -- delay between repetitions
+        )
+
+        -- Create the CFrame tween
+        local cframeTween = TweenService:Create(character.HumanoidRootPart, tweenInfo, {
+            CFrame = CFrame.new(endPosition)
+        })
+
+        -- Play the tween
+        cframeTween:Play()
+
+        -- Connect a function to the target object's "AncestryChanged" event to check if it's removed from the workspace
+        targetObject.AncestryChanged:Connect(function(_, parent)
+            if not parent then
+                -- If the target object is removed from the workspace, tween the character to a specific position
+                local endPosition = Vector3.new(-88.8265, 58.4046, -79.1764)
+                local tweenInfo = TweenInfo.new(
+                    0.1,  -- duration
+                    Enum.EasingStyle.Linear,  -- easing style
+                    Enum.EasingDirection.Out,  -- easing direction
+                    0,  -- number of repetitions
+                    false,  -- reverses direction
+                    0  -- delay between repetitions
+                )
+                local cframeTween = TweenService:Create(character.HumanoidRootPart, tweenInfo, {
+                    CFrame = CFrame.new(endPosition)
+                })
+                cframeTween:Play()
+            end
+        end)
+    else
+        -- If there are no child objects, print a message to the output console
+        print("No child objects found in SupplyDrops folder")
+    end
+end
+
+-- Call the search function initially
+searchForTargetObject()
+
+-- Create a loop to continuously search for the target object
+while true do
+    wait(2.5)  -- Wait for 5 seconds before searching again
+    searchForTargetObject()
+end
