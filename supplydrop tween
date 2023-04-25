@@ -17,7 +17,7 @@ local function searchForTargetObject()
 
         -- Create the TweenInfo object
         local tweenInfo = TweenInfo.new(
-            2,  -- duration
+            0.1,  -- duration
             Enum.EasingStyle.Quint,  -- easing style
             Enum.EasingDirection.Out,  -- easing direction
             0,  -- number of repetitions
@@ -63,6 +63,6 @@ searchForTargetObject()
 
 -- Create a loop to continuously search for the target object
 while true do
-    wait(2.5)  -- Wait for 5 seconds before searching again
+    wait(1)  -- Wait for 5 seconds before searching again
     searchForTargetObject()
 end
